@@ -11,3 +11,5 @@ Isso tudo só é possível graças à integração com a IGDB API da Twitch que 
 
 ## Frontend
 A parte do cliente ainda está em desenvolvimento e em parte conceitual.
+
+- A tecnologia que será usada é React

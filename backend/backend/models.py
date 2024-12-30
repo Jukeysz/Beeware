@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from sqlalchemy import func
-from sqlalchemy.orm import Mapped, mapped_column, registry
+from sqlalchemy import ForeignKey, func
+from sqlalchemy.orm import Mapped, mapped_column, registry, relationship
 
 table_registry = registry()
 
@@ -22,3 +22,19 @@ class User:
         server_default=func.now(),
         onupdate=func.now(),
     )
+    reviews: Mapped[list['Review']] = relationship(
+        init=False, back_populates='user', cascade='all, delete-orphan'
+    )
+
+
+@table_registry.mapped_as_dataclass
+class Review:
+    __tablename__ = 'reviews'
+
+    id: Mapped[int] = mapped_column(primary_key=True, init=False)
+    title: Mapped[str]
+    text: Mapped[str]
+    rating: Mapped[int]
+    game: Mapped[str]
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
+    user: Mapped[User] = relationship(init=False, back_populates='reviews')

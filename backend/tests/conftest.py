@@ -5,8 +5,28 @@ from sqlalchemy.orm import Session
 
 from backend.app import app
 from backend.database import get_session
-from backend.models import User, table_registry
+from backend.models import Review, User, table_registry
 from backend.security import get_password_hash
+
+
+@pytest.fixture()
+def authenticated(client, user):
+    response = client.post(
+        '/auth/token',
+        data={
+            'username': user.email,
+            'password': user.plain_password,
+        }
+    )
+
+    cookies = response.cookies
+
+    client.cookies.set(
+            "access_token",
+            cookies["access_token"],
+    )
+
+    return client
 
 
 @pytest.fixture()
@@ -36,6 +56,22 @@ def other_user(session):
 
     new_user.plain_password = '12345'
     return new_user
+
+
+@pytest.fixture()
+def review(session, user, token):
+    new_review = Review(
+        user_id=user.id,
+        title='test',
+        text='test',
+        game='test',
+        rating=5,
+    )
+
+    session.add(new_review)
+    session.commit()
+
+    return new_review
 
 
 @pytest.fixture()

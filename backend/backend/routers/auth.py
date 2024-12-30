@@ -59,3 +59,10 @@ def refresh_token(user: user, response: Response):
     )
 
     return {'message': 'token refreshed'}
+
+
+@router.get("/verify")
+def verify_token(
+        usr: user
+    ):
+    return {"authenticated": True, "email": usr.email}

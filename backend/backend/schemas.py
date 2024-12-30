@@ -23,3 +23,26 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     username: str
+
+
+class ReviewData(BaseModel):
+    title: str
+    text: str
+    rating: int
+    game: str
+
+
+class GameData(BaseModel):
+    name: str
+
+
+class ReviewResponse(BaseModel):
+    id: int
+    title: str
+    text: str
+    rating: int
+    game: str
+    user_id: int
+
+    class Config:
+        orm_mode = True
